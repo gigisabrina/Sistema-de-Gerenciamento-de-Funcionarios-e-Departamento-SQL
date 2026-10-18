@@ -16,8 +16,7 @@ INSERT INTO Funcionarios (Nome, Cargo, Salario) VALUES
 
 --- 2: Consulta com Filtro e Ordenação. Utilizando a tabela funcionarios, escreva uma consulta que retorne todos os funcionarios com o cargo de desenvolvedor e ordene o resultado pelo campo Salario em ordem decrescente.
 
-SELECT *
-FROM Funcionarios
+SELECT * FROM Funcionarios
 WHERE Cargo = 'Desenvolvedor'
 ORDER BY Salario DESC;
 
