@@ -1,0 +1,85 @@
+
+---  1: Criação de Tabela e Inserção de registros de Dados na tabela
+
+CREATE TABLE Funcionarios (
+    Id      INT AUTO_INCREMENT PRIMARY KEY,
+    Nome    VARCHAR(50),
+    Cargo   VARCHAR(50),
+    Salario DECIMAL(10,2)
+);
+
+INSERT INTO Funcionarios (Nome, Cargo, Salario) VALUES
+    ('Fernando Henrique', 'Desenvolvedor', 4500.00),
+    ('Carlos Chagas',     'Analista',      3800.00),
+    ('Paula Fernandes',   'DBA',           5200.00),
+    ('Ludmila Anita',     'Desenvolvedor', 4700.00);
+
+--- 2: Consulta com Filtro e Ordenação. Utilizando a tabela funcionarios, escreva uma consulta que retorne todos os funcionarios com o cargo de desenvolvedor e ordene o resultado pelo campo Salario em ordem decrescente.
+
+SELECT *
+FROM Funcionarios
+WHERE Cargo = 'Desenvolvedor'
+ORDER BY Salario DESC;
+
+--- 3: Atualização de Dados. Atualize o salario do funcionario Carlos Chagas para 4000.00
+
+UPDATE Funcionarios
+SET Salario = 4000.00
+WHERE Nome = 'Carlos Chagas';
+
+
+--- 4: Uso de Funções Agregadas. Escreva uma consulta que retorne o salário médio dos funcionários e o número total de
+funcionários cadastrados na tabela Funcionarios.
+
+SELECT
+    AVG(Salario) AS SalarioMedio,
+    COUNT(*)     AS TotalFuncionarios FROM Funcionarios;
+
+
+--- 5: Exclusão de Registros. Exclua todos os funcionários que possuem um salário inferior a 4000.00
+
+DELETE FROM Funcionarios
+WHERE Salario < 4000.00;
+
+--- 6: Consulta com Join
+
+
+-- Criação da tabela Departamentos e inserir os registros de dados
+
+CREATE TABLE Departamentos (
+    Id   INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+INSERT INTO Departamentos VALUES
+    ('TI'),
+    ('RH'),
+    ('Financeiro');
+
+-- Adicionar a coluna DepartamentoId com chave estrangeira
+
+ALTER TABLE Funcionarios
+    ADD COLUMN DepartamentoId INT,
+    ADD CONSTRAINT fk_funcionarios_departamentos
+        FOREIGN KEY (DepartamentoId) REFERENCES Departamentos (Id);
+
+-- Atualizar os departamentos dos funcionários
+
+UPDATE Funcionarios
+SET DepartamentoId = (SELECT Id FROM Departamentos WHERE Nome = 'TI')
+WHERE Nome IN ('Fernando Henrique', 'Carlos Chagas');
+
+UPDATE Funcionarios
+SET DepartamentoId = (SELECT Id FROM Departamentos WHERE Nome = 'RH')
+WHERE Nome = 'Ludmila Anita';
+
+UPDATE Funcionarios
+SET DepartamentoId = (SELECT Id FROM Departamentos WHERE Nome = 'Financeiro')
+WHERE Nome = 'Paula Fernandes';
+
+-- Consulta com JOIN: nome do funcionário e nome do departamento
+
+SELECT f.Nome AS Funcionario,
+       d.Nome AS Departamento
+FROM Funcionarios f
+INNER JOIN Departamentos d ON f.DepartamentoId = d.Id;
